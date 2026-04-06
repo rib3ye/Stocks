@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -210,6 +211,11 @@
                 </tr>
               </tbody>
             </table>
+          </div>
+
+          <!-- Revenue Trend Chart -->
+          <div class="mt-4">
+            <canvas id="revenueChart" height="200"></canvas>
           </div>
 
           <!-- Cash Flow -->
@@ -486,6 +492,11 @@
             </tbody>
           </table>
         </div>
+
+        <!-- Gross Margin Trend Chart -->
+        <div class="mt-6">
+          <canvas id="marginChart" height="200"></canvas>
+        </div>
       </section>
 
       <section id="peer-comparison">
@@ -592,6 +603,12 @@
           </table>
         </div>
         <p class="text-xs text-gray-400 mt-3">Notes: Piotroski F-Score is approximate for peers (estimated from public financial data). Rule of 40 = revenue growth % + FCF margin % (or operating margin % where FCF not available). Cash conversion = operating cash flow / net income. ROIC for Arista is very high due to asset-light model and minimal tangible capital; HPE's ROIC is post-Juniper acquisition and reflects goodwill dilution. Netgear P/E is trailing (non-GAAP profitable); GAAP operating income was negative in FY2025.</p>
+
+        <!-- Peer Comparison Charts -->
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div><canvas id="peerMarginChart" height="250"></canvas></div>
+          <div><canvas id="peerPEChart" height="250"></canvas></div>
+        </div>
       </section>
 
       <section id="competitive-position">
@@ -701,6 +718,156 @@
     </footer>
 
   </div>
+
+  <script>
+    const gray400 = '#9ca3af';
+    const gray500 = '#6b7280';
+    const gray700 = '#374151';
+    const blue500 = '#3b82f6';
+    const blue300 = '#93c5fd';
+    const slate400 = '#94a3b8';
+
+    Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+    Chart.defaults.font.size = 12;
+    Chart.defaults.color = gray500;
+    Chart.defaults.plugins.legend.labels.boxWidth = 12;
+
+    // 1. Revenue Trend Bar Chart
+    new Chart(document.getElementById('revenueChart'), {
+      type: 'bar',
+      data: {
+        labels: ['FY2022', 'FY2023', 'FY2024', 'FY2025', 'TTM'],
+        datasets: [{
+          label: 'Revenue ($B)',
+          data: [1.682, 1.930, 1.928, 2.574, 2.97],
+          backgroundColor: [slate400, slate400, slate400, blue500, blue300],
+          borderRadius: 4,
+          barPercentage: 0.6,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          title: { display: true, text: 'Revenue Trend', color: gray700, font: { size: 14, weight: '600' }, padding: { bottom: 12 } },
+          tooltip: {
+            callbacks: { label: ctx => `$${ctx.parsed.y.toFixed(3)}B` }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { callback: v => `$${v}B` },
+            grid: { color: '#f3f4f6' }
+          },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+
+    // 2. Gross Margin Trend Line Chart
+    new Chart(document.getElementById('marginChart'), {
+      type: 'line',
+      data: {
+        labels: ['FY2021', 'FY2022', 'FY2023', 'FY2024', 'FY2025', 'TTM'],
+        datasets: [{
+          label: 'Gross Margin',
+          data: [48.1, 39.6, 39.2, 38.4, 43.4, 45.4],
+          borderColor: blue500,
+          backgroundColor: 'rgba(59,130,246,0.08)',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 4,
+          pointBackgroundColor: blue500,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          title: { display: true, text: 'Gross Margin Trend (%)', color: gray700, font: { size: 14, weight: '600' }, padding: { bottom: 12 } },
+          tooltip: {
+            callbacks: { label: ctx => `${ctx.parsed.y}%` }
+          }
+        },
+        scales: {
+          y: {
+            min: 30,
+            max: 55,
+            ticks: { callback: v => `${v}%` },
+            grid: { color: '#f3f4f6' }
+          },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+
+    // 3. Peer Comparison — Gross Margin
+    const peerLabels = ['Ubiquiti', 'Cisco', 'Arista', 'Netgear', 'HPE'];
+    const peerColors = [blue500, slate400, slate400, slate400, slate400];
+
+    new Chart(document.getElementById('peerMarginChart'), {
+      type: 'bar',
+      data: {
+        labels: peerLabels,
+        datasets: [{
+          label: 'Gross Margin (%)',
+          data: [45, 66, 64, 38, 29],
+          backgroundColor: peerColors,
+          borderRadius: 4,
+          barPercentage: 0.6,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          title: { display: true, text: 'Gross Margin vs Peers', color: gray700, font: { size: 13, weight: '600' }, padding: { bottom: 10 } },
+          tooltip: { callbacks: { label: ctx => `${ctx.parsed.y}%` } }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 80,
+            ticks: { callback: v => `${v}%` },
+            grid: { color: '#f3f4f6' }
+          },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+
+    // 4. Peer Comparison — P/E Ratio
+    new Chart(document.getElementById('peerPEChart'), {
+      type: 'bar',
+      data: {
+        labels: peerLabels,
+        datasets: [{
+          label: 'P/E Ratio',
+          data: [54, 28, 46, 15, 14],
+          backgroundColor: peerColors,
+          borderRadius: 4,
+          barPercentage: 0.6,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          title: { display: true, text: 'P/E Ratio vs Peers', color: gray700, font: { size: 13, weight: '600' }, padding: { bottom: 10 } },
+          tooltip: { callbacks: { label: ctx => `${ctx.parsed.y}x` } }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { callback: v => `${v}x` },
+            grid: { color: '#f3f4f6' }
+          },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+  </script>
 
 </body>
 </html>
