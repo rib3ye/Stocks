@@ -225,7 +225,7 @@ Search queries to try:
 
 **Prompt to send:**
 
-You are analyzing {COMPANY}'s ({TICKER}) competitive position and moat in the {INDUSTRY} industry for a stock research page. Peers: {PEER_COMPANIES}. Use WebSearch and WebFetch.
+You are analyzing {COMPANY}'s ({TICKER}) competitive position and moat in the {INDUSTRY} industry for a stock research page. Peers: {PEER_COMPANIES}. Use WebSearch and WebFetch. Flag uncertain figures with [verify].
 
 Provide:
 
@@ -300,7 +300,7 @@ Search queries to try:
 
 **Prompt to send:**
 
-You are researching the regulatory, geopolitical, and macro context for {COMPANY} ({TICKER}) in the {INDUSTRY} industry. Use WebSearch and WebFetch.
+You are researching the regulatory, geopolitical, and macro context for {COMPANY} ({TICKER}) in the {INDUSTRY} industry. Use WebSearch and WebFetch. Flag uncertain figures with [verify].
 
 Provide these sections as structured markdown prose:
 
