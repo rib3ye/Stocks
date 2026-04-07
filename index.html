@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stock Research</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+  <div class="max-w-4xl mx-auto px-6 py-10">
+
+    <header class="mb-10 border-b border-gray-300 pb-6">
+      <h1 class="text-4xl font-bold text-gray-900 tracking-tight">Stock Research</h1>
+      <p class="mt-1 text-sm text-gray-500">Personal research reference &middot; Not investment advice</p>
+    </header>
+
+    <main>
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-gray-200">
+            <th class="text-left py-3 text-gray-500 font-medium w-28">Ticker</th>
+            <th class="text-left py-3 text-gray-500 font-medium">Company</th>
+            <th class="text-left py-3 text-gray-500 font-medium">Sector</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr class="hover:bg-gray-100 transition-colors">
+            <td class="py-3"><a href="BMNR/" class="font-mono font-semibold text-blue-600 hover:underline">BMNR</a></td>
+            <td class="py-3 text-gray-700">Bitmine Immersion Technologies, Inc.</td>
+            <td class="py-3 text-gray-500">Digital Assets / Ethereum Treasury</td>
+          </tr>
+          <tr class="hover:bg-gray-100 transition-colors">
+            <td class="py-3"><a href="BRK.B/" class="font-mono font-semibold text-blue-600 hover:underline">BRK.B</a></td>
+            <td class="py-3 text-gray-700">Berkshire Hathaway Inc.</td>
+            <td class="py-3 text-gray-500">Financials / Diversified Conglomerate</td>
+          </tr>
+          <tr class="hover:bg-gray-100 transition-colors">
+            <td class="py-3"><a href="UI/" class="font-mono font-semibold text-blue-600 hover:underline">UI</a></td>
+            <td class="py-3 text-gray-700">Ubiquiti Inc.</td>
+            <td class="py-3 text-gray-500">Technology / Networking Equipment</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+
+    <footer class="mt-16 pt-4 border-t border-gray-200 text-xs text-gray-400">
+      Personal research reference only. Not investment advice.
+    </footer>
+
+  </div>
+</body>
+</html>
